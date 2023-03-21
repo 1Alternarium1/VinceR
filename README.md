@@ -41,10 +41,10 @@ Example:
 <h3>File icon.png:</h3>
 <p>Just icon for your program (if CREATEDESKTOPFILE=Off, you don't need to create this file) (I'm too lasy to drow icon for VinceR GUI and it don't have icon)</p>
 
-<h3>sysroot directory</h3>
-<p>It's like an simulation of system root directory</p>
-<p>Example:sysroot/usr/bin/[package executable file]</p>
-<p>At installing time it just copies it to system root directory</p>
+<h3>usr directory</h3>
+<p>It's like an simulation of /usr directory</p>
+<p>Example:usr/bin/[package executable file]</p>
+<p>At installing time it just copies it to /usr directory</p>
 
 <h3>beforeinstall.sh</h3>
 <p>I think it's clearly for human who reading this (There is some information in pkg.config)</p>
