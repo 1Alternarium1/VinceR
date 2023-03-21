@@ -1,0 +1,109 @@
+import sys
+import os
+
+helptxt = """Using: vincer [action] [name]
+    actions: i - install
+             r - remove"""
+
+try: 
+    action = sys.argv[1]
+except:
+    print(helptxt)
+    exit()
+
+if action == "i":
+
+    os.system(f"tar -xf {sys.argv[2]}")
+
+    pkg = sys.argv[2].replace(".vrpkg", "")
+
+    pkgconfigfile = open(f'{pkg}/pkg.config', 'r')
+    pkgconfig = pkgconfigfile.read().split("\n")
+    pkgconfigfile.close()
+
+    pkgname = ""
+    pkgver = ""
+    pkgdescr = ""
+    pkgcdf = ""
+    pkgai = ""
+    pkgbi = ""
+    pkgcat = ""
+    pkgexec = ""
+
+    cl = "" # current line
+    cln = 0 # current line number
+
+    while cln < len(pkgconfig):
+        cl = pkgconfig[cln]
+
+        if cl.startswith("NAME: "):
+            pkgname = cl.replace("NAME: ", "")
+        elif cl.startswith("VERSION: "):
+            pkgver = cl.replace("VERSION: ", "")
+        elif cl.startswith("DESCR: "):
+            pkgdescr = cl.replace("DESCR: ", "")
+        elif cl.startswith("CREATEDESKTOPFILE: "):
+            pkgcdf = cl.replace("CREATEDESKTOPFILE: ", "")
+        elif cl.startswith("AFTERINSTALL: "):
+            pkgai = cl.replace("AFTERINSTALL: ", "")
+        elif cl.startswith("BEFOREINSTALL: "):
+            pkgbi = cl.replace("BEFOREINSTALL: ", "")
+        elif cl.startswith("CATEGORY: "):
+            pkgcat = cl.replace("CATEGORY: ", "")
+        elif cl.startswith("EXEC: "):
+            pkgexec = cl.replace("EXEC: ", "")
+        elif cl == "":
+            pass
+        else:
+            print("Package is corrupted!")
+            exit(2)
+        
+        cln += 1
+
+    if pkgbi == "On":
+        os.system(f"source {pkg}/beforeinstall.sh")
+
+    os.system(f'cp -r {pkg}/sysroot/* /')
+
+    if pkgcdf == "On":
+        os.system(f"mkdir /usr/share/{pkgexec}")
+        os.system(f"cp -r {pkg}/icon.png /usr/share/{pkgexec}/")
+        desktopfile = f"""[Desktop Entry]
+        Version={pkgver}
+        Name={pkgname}
+        Type=Application
+        Exec={pkgexec}
+        Icon=/usr/share/{pkgexec}/icon.png
+        Comment={pkgdescr}
+        """
+        os.system(f"echo \"{desktopfile}\" > /usr/share/applications/{pkgexec}.desktop")
+
+    if pkgai == "On":
+        os.system(f"source {pkg}/afterinstall.sh")
+
+    os.system(f"rm -r {pkg}/")
+
+elif action == "r":
+    pkg = sys.argv[2]
+    wherei = os.popen(f'whereis {pkg}').read().replace(f"{pkg}: ", "")
+
+    if wherei != "":
+        whereis = os.popen(f'whereis {pkg}').read().replace(f"{pkg}: ", "").split(" ")
+        cpn = 0 # current path number
+        while cpn < len(whereis):
+
+            if os.path.isfile(whereis[cpn]):
+                os.system(f"rm {whereis[cpn]}")
+            else:
+                os.system(f"rm -r {whereis[cpn]}")
+            
+            if os.path.exists(f"/usr/share/applications/{pkg}.desktop"):
+                os.system(f"rm /usr/share/applications/{pkg}.desktop")
+            
+            cpn += 1
+    else:
+        print(f"Program {pkg} don't exist")
+
+else:
+    print(helptxt)
+    exit()

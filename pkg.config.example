@@ -1,0 +1,8 @@
+NAME: Test VinceR package
+DESCR: Just test package for VinceR
+CREATEDESKTOPFILE: On
+AFTERINSTALL: On
+BEFOREINSTALL: On
+CATEGORY: Other
+VERSION: 1.0
+EXEC: vincertest
