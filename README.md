@@ -6,10 +6,11 @@ VinceR is an package manager for linux
 
 ```sh
 wget https://github.com/1Alternarium1/VinceR/releases/download/v0.1/vincer
-cp ./vincer ~/bin/ 
 ```
 
 Done!
+
+I also recomend you to copy it to ~/bin directory or /usr/bin for easier using vincer (GUI won't work without it)
 
 # How to use:
 
