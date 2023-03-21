@@ -41,7 +41,7 @@ Example:
 <h3>File icon.png:</h3>
 <p>Just icon for your program (if CREATEDESKTOPFILE=Off, you don't need to create this file) (I'm too lasy to drow icon for VinceR GUI and it don't have icon)</p>
 
-<h3>Sysroot directory</h3>
+<h3>sysroot directory</h3>
 <p>It's like an simulation of system root directory</p>
 <p>Example:sysroot/usr/bin/[package executable file]</p>
 <p>At installing time it just copies it to system root directory</p>
