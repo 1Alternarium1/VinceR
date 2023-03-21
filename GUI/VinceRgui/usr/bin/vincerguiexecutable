@@ -1,0 +1,60 @@
+#!/usr/bin/python3
+
+import gi
+import os
+
+gi.require_version("Gtk", "3.0")
+
+
+from gi.repository import Gtk
+
+
+class MyWindow(Gtk.Window):
+    def __init__(self):
+        super().__init__(title="VinceR GUI")
+
+        self.box = Gtk.VBox(spacing=3)
+
+        self.buttonbox = Gtk.HBox(spacing=3)
+
+        self.pkgchoose = Gtk.FileChooserButton(title="Choose an VinceR package")
+        self.box.pack_start(self.pkgchoose, True, True, 0)
+
+        self.installbutton = Gtk.Button(label="Install")
+        self.installbutton.connect("clicked", self.on_installbutton_clicked)
+        self.buttonbox.pack_start(self.installbutton, True, True, 0)
+
+        self.removebutton = Gtk.Button(label="Remove")
+        self.removebutton.connect("clicked", self.on_removebutton_clicked)
+        self.buttonbox.pack_start(self.removebutton, True, True, 0)
+
+        self.box.pack_start(self.buttonbox, True, True, 0)
+
+        self.add(self.box)
+
+    def on_installbutton_clicked(self, widget):
+        pkgfilename = self.pkgchoose.get_filename().split("/")[-1]
+        pkgname = self.pkgchoose.get_filename().split("/")[-1].replace(".vrpkg", "")
+
+        pkgpath = self.pkgchoose.get_filename().replace(pkgfilename, "")
+
+        cmnd = f"""#!/bin/bash
+        cd {pkgpath}
+        vincer i {self.pkgchoose.get_filename()}
+        """
+
+        wherei = os.popen(f'whereis {pkgname}').read().replace(f'{pkgname}:', '')
+        os.system(cmnd)
+
+    def on_removebutton_clicked(self, widget):
+        pkgname = self.pkgchoose.get_filename().split("/")[-1].replace(".vrpkg", "")
+        os.system(f"""#!/bin/bash
+        vincer r {pkgname}""")
+
+win = MyWindow()
+win.connect("destroy", Gtk.main_quit)
+win.show_all()
+
+
+Gtk.main()
+
