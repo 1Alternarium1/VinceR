@@ -26,6 +26,8 @@ Example:
 
 # Structure of packages:
 
+<p>Package for VinceR is just .tar.xz file with .vrpkg file extension</p>
+
 <h3>File pkg.config:</h3>
 <p>NAME: [Here the name of your package]</p>
 <p>DESCR: [Here the describtion of your package]</p>
